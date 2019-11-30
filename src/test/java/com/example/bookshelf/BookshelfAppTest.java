@@ -59,4 +59,20 @@ public class BookshelfAppTest {
         with().body("{\"numberOfChapters\":10}").when().post("book/add").then().statusCode(500);
     }
 
+    @Test
+    public void getMethod_bookDoesNotExist_shouldReturnStatus404() {
+
+        with().param("id", 012345).when().get("/book/get").then().statusCode(404);
+    }
+
+    @Test
+    public void getMethod_wrongTypeOfBookIdParameter_shouldReturnStatus400() {
+        with().param("id", "id1234").when().get("/book/get").then().statusCode(400).body(equalTo("Request param 'bookId' has to be a number."));
+    }
+
+    @Test
+    public void getMethod_noBookIdParameter_shouldReturnStatus400() {
+        when().get("/book/get").then().statusCode(400).body(equalTo("Incorrect request params"));
+    }
+
 }
