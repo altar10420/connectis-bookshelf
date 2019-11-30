@@ -21,4 +21,9 @@ public class BookshelfApp extends NanoHTTPD {
             System.err.println("Server cannot start because of error:\n" + e );
         }
     }
+
+    @Override
+    public Response serve(IHTTPSession session) {
+        return null;
+    }
 }
