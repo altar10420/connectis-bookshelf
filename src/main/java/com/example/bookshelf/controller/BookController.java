@@ -1,7 +1,7 @@
 package com.example.bookshelf.controller;
 
 import com.example.bookshelf.storage.BookStorage;
-import com.example.bookshelf.storage.impl.StaticListBookStorageImpl;
+import com.example.bookshelf.storage.impl.PostgresBookStorageImpl;
 import com.example.bookshelf.type.Book;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +21,8 @@ public class BookController {
 
     private final static String BOOK_ID_PARAM_NAME = "id";  //this will be in get request (http://localhost:8080/book/get?id=xxxx)
 
-    private BookStorage bookStorage = new StaticListBookStorageImpl();
+//    private BookStorage bookStorage = new StaticListBookStorageImpl();  //this was before database
+    private BookStorage bookStorage = new PostgresBookStorageImpl();
 
     public Response serveGetBookRequest(IHTTPSession session) {
 
