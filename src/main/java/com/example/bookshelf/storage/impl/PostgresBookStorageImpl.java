@@ -47,6 +47,40 @@ public class PostgresBookStorageImpl implements BookStorage {
 
     @Override
     public Book getBook(long id) {
+
+        final String sqlSelectBook = "SELECT * FROM books WHERE book_id = ?'";
+
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(sqlSelectBook);
+
+            preparedStatement.setLong(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getLong("book_id"));
+                book.setTitle(resultSet.getString("title"));
+                book.setAuthor(resultSet.getString("author"));
+                book.setPagesSum(resultSet.getInt("pages_sum"));
+                book.setYearOfPublished(resultSet.getInt("year_of_published"));
+                book.setPublishingHouse(resultSet.getString("publishing_house"));
+
+                return book;
+            }
+
+        } catch (SQLException e) {
+
+            System.err.println("Error during invoke SQL query \n" + e);
+            throw new RuntimeException("Error during invoke SQL query");
+
+        } finally {
+            closeDataBaseResources(connection, preparedStatement);
+        }
+
         return null;
     }
 
@@ -93,7 +127,7 @@ public class PostgresBookStorageImpl implements BookStorage {
 
         final String sqlInsertBook = "INSERT INTO books(" +
                 "book_id, title, author, pages_sum, year_of_published, publishing_house)" +
-                "VALUES (?, ?, ?, ?, ?, ?;";
+                "VALUES (?, ?, ?, ?, ?, ?);";
 
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
